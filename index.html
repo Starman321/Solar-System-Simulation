@@ -39,7 +39,7 @@
 
         // Scene, camera, and renderer
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 11000);
         camera.position.set(0, 0, 10);
         camera.lookAt(0, 0, 0);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -59,7 +59,7 @@
         const starMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png');
 
         // Create star sphere
-        const starGeometry = new THREE.SphereGeometry(500, 64, 64);
+        const starGeometry = new THREE.SphereGeometry(10000, 64, 64);
         const starMaterial = new THREE.MeshBasicMaterial({
             map: starMap,
             side: THREE.BackSide
