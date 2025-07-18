@@ -30,12 +30,12 @@
         const distanceFactor = 1;
         const timeScale = 20;
 
-        // Angular speeds in radians per second
-        const daysPerYear = 365.25;
-        const secondsPerDay = 24 * 3600;
-        const omega_orbit = (2 * Math.PI) / (daysPerYear * secondsPerDay);
-        const omega_spin = (2 * Math.PI) / secondsPerDay;
-        const omega_stars = omega_spin;
+        // Earth angular speeds in radians per second
+        const earthDaysPerYear = 365.25;
+        const earthSecondsPerDay = 24 * 3600;
+        const earth_omega_orbit = (2 * Math.PI) / (earthDaysPerYear * earthSecondsPerDay);
+        const earth_omega_spin = (2 * Math.PI) / earthSecondsPerDay;
+        //const omega_stars = earth_omega_spin;
 
         // Scene, camera, and renderer
         const scene = new THREE.Scene();
@@ -57,8 +57,11 @@
         const cloudMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmap.jpg');
         const cloudAlphaMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmaptrans.jpg');
         const starMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png');
+		const marsMap = textureLoader.load('https://static.wikia.nocookie.net/planet-texture-maps/images/1/19/Mars_Map.png/revision/latest?cb=20190402042909')
+		const marsBumpMap = textureLoader.load('https://planetpixelemporium.com/download/download.php?marsbump1k.jpg')
+		const marsSpecMap = textureLoader.load('https://www.classe.cornell.edu/~seb/celestia/blok/rgbmars-spec-2k.jpg')
 
-        // Create star sphere
+        // Create star background sphere
         const starGeometry = new THREE.SphereGeometry(10000, 64, 64);
         const starMaterial = new THREE.MeshBasicMaterial({
             map: starMap,
@@ -109,8 +112,25 @@
         const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
         earthMesh.add(cloudMesh);
 
+        // Mars mesh
+        const marsRadius = sunRadius / 205.2;
+        const marsGeometry = new THREE.SphereGeometry(marsRadius, 32, 32);
+        const marsMaterial = new THREE.MeshPhongMaterial({
+            map: marsMap,
+            bumpMap: marsBumpMap,
+            bumpScale: 0.5,
+            specularMap: marsSpecMap,
+            specular: new THREE.Color(0x333333),
+            shininess: 5,
+        });
+        const marsMesh = new THREE.Mesh(marsGeometry, marsMaterial);
+        marsMesh.name = 'Mars';
+		const marsDistance = (sunRadius * 328.6) / distanceFactor;
+        scene.add(marsMesh);
+		
+
         // Single point light at Sun's position
-        const sunLight = new THREE.PointLight(0xffffff, 1, 1000);
+        const sunLight = new THREE.PointLight(0xffffff, 1, 4000);
         sunLight.position.set(0, 0, 0);
         scene.add(sunLight);
 
@@ -133,7 +153,7 @@
         }
 
         // Orbit targets
-        const targets = { '1': sunMesh, '2': earthMesh };
+        const targets = { '1': sunMesh, '2': earthMesh, '3': marsMesh };
         let currentTarget = sunMesh;
 
         // Create on-screen buttons for mobile
@@ -164,18 +184,29 @@
             lastTime = currentTime;
             simulationTime += deltaTime * timeScale;
 
-            const theta = omega_orbit * simulationTime;
-            const phi = omega_spin * simulationTime;
+            const theta = earth_omega_orbit * simulationTime;
+            const phi = earth_omega_spin * simulationTime;
 
+			// Earth position and rotation calculate
             earthMesh.position.set(
                 Math.cos(theta) * earthDistance,
                 0,
                 Math.sin(theta) * earthDistance
             );
+			
+			earthMesh.rotation.y = phi;
+			
+			// Mars position calculate
+			marsMesh.position.set(
+				Math.cos(theta) * marsDistance,
+				0,
+				Math.sin(theta) * marsDistance
+				);
+            
+			marsMesh.rotation.y = phi;
 
-            earthMesh.rotation.y = phi;
 
-            const omega_sun = (2 * Math.PI) / (25 * secondsPerDay);
+            const omega_sun = (2 * Math.PI) / (25 * earthSecondsPerDay);
             sunMesh.rotation.y = omega_sun * simulationTime;
 
             controls.target.copy(currentTarget.position);
