@@ -50,16 +50,16 @@
         const textureLoader = new THREE.TextureLoader();
 
         // Load textures
-        const earthMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthmap1k.jpg');
-        const earthBumpMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthbump1k.jpg');
-        const earthSpecMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthspec1k.jpg');
-        const earthNightMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthlights1k.jpg');
-        const cloudMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmap.jpg');
-        const cloudAlphaMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmaptrans.jpg');
-        const starMap = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png');
-		const marsMap = textureLoader.load('https://static.wikia.nocookie.net/planet-texture-maps/images/1/19/Mars_Map.png/revision/latest?cb=20190402042909')
-		const marsBumpMap = textureLoader.load('https://planetpixelemporium.com/download/download.php?marsbump1k.jpg')
-		const marsSpecMap = textureLoader.load('https://www.classe.cornell.edu/~seb/celestia/blok/rgbmars-spec-2k.jpg')
+        const earthMap = textureLoader.load('textures/earthmap1k.jpg');
+        const earthBumpMap = textureLoader.load('textures/earthbump1k.jpg');
+        const earthSpecMap = textureLoader.load('textures/earthspec1k.jpg');
+        const earthNightMap = textureLoader.load('textures/earthlights1k.jpg');
+        const cloudMap = textureLoader.load('textures/earthcloudmap.jpg');
+        const cloudAlphaMap = textureLoader.load('textures/earthcloudmaptrans.jpg');
+        const starMap = textureLoader.load('textures/starfield.png');
+		const marsMap = textureLoader.load('textures/Mars_Map')
+		const marsBumpMap = textureLoader.load('textures/marsbump1k.jpg')
+		const marsSpecMap = textureLoader.load('textures/rgbmars-spec-2k.jpg')
 
         // Create star background sphere
         const starGeometry = new THREE.SphereGeometry(10000, 64, 64);
